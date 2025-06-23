@@ -1,0 +1,43 @@
+# Ignorar pasta HTML com arquivos de desenvolvimento
+assets/html/
+
+# Ignorar arquivos temporários e de desenvolvimento na pasta docs
+assets/docs/Plano_de_Gestao_CMULTI_2025_2029_ver_01_ver_02.pdf
+assets/docs/Plano_de_Gestao_CMULTI_2025_2029_ver_01.docx
+assets/docs/plano_texto.txt
+assets/docs/document.xml
+assets/docs/conteudo_temas.txt
+assets/docs/plano_texto_limpo.txt
+
+# Manter apenas o arquivo PDF que está sendo usado:
+# assets/docs/Plano_de_Gestao_CMULTI_2025_2029_ver_01_ver_02_assinado_assinado.pdf
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Arquivos temporários
+*.tmp
+*.temp
+*~
+
+# Logs
+*.log
+
+# Arquivos de backup
+*.bak
+*.backup
+
+# Arquivos do editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node modules (caso seja adicionado futuramente)
+node_modules/
+
+# Arquivos de build (caso seja adicionado futuramente)
+dist/
+build/ 
