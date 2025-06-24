@@ -60,14 +60,60 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Função para scroll suave
+    // Função para scroll suave melhorada
     function smoothScroll(target) {
-        const element = document.querySelector(target);
+        // Remover # se existir
+        const targetId = target.replace('#', '');
+        let element = document.getElementById(targetId);
+        
+        // Fallbacks específicos se o elemento não for encontrado
+        if (!element) {
+            console.log(`Elemento ${targetId} não encontrado, tentando fallbacks...`);
+            
+            if (targetId === 'hero-section') {
+                element = document.querySelector('header.header') || document.querySelector('.header');
+                console.log('Fallback header:', element);
+            } else if (targetId === 'contact-section') {
+                element = document.querySelector('footer.footer') || document.querySelector('.footer');
+                console.log('Fallback footer:', element);
+            } else if (targetId === 'timeline-section') {
+                element = document.querySelector('.timeline-section') || document.querySelector('.timeline');
+                console.log('Fallback timeline:', element);
+            } else {
+                element = document.querySelector(target);
+            }
+        }
+        
         if (element) {
+            console.log(`Navegando para elemento:`, element);
+            
+            // Método mais simples e confiável
             element.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
             });
+            
+            // Pequeno ajuste para compensar header se necessário
+            setTimeout(() => {
+                const currentScroll = window.pageYOffset;
+                const headerHeight = document.querySelector('.header')?.offsetHeight || 0;
+                
+                if (currentScroll > 0) {
+                    window.scrollTo({
+                        top: currentScroll - Math.min(headerHeight, 80),
+                        behavior: 'smooth'
+                    });
+                }
+            }, 100);
+        } else {
+            console.log(`Elemento não encontrado: ${target}`);
+            // Como último recurso, tentar scroll para o topo se for hero-section
+            if (targetId === 'hero-section') {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
         }
     }
     
@@ -217,24 +263,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const targetElement = document.getElementById(section.id);
-                if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                } else {
-                    // Fallback para elementos que podem ter IDs diferentes
-                    const fallbackElement = document.querySelector(`[data-section="${section.id}"]`) || 
-                                          document.querySelector(`.${section.id}`) ||
-                                          document.querySelector(`#${section.id.replace('-section', '')}`);
-                    if (fallbackElement) {
-                        fallbackElement.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                }
+                
+                // Usar a função smoothScroll melhorada
+                smoothScroll(`#${section.id}`);
             });
             
             quickNav.appendChild(link);
@@ -460,11 +491,11 @@ document.addEventListener('DOMContentLoaded', function() {
         setupSocialSharing();
         initTabs(); // Inicializar tabs
         
-        // Adicionar IDs aos elementos para navegação
-        document.querySelector('.header').id = 'header';
-        document.querySelector('.main-content').id = 'main-content';
-        document.querySelector('.timeline').id = 'timeline';
-        document.querySelector('.footer').id = 'footer';
+        // Verificar se os elementos principais existem
+        console.log('Verificando elementos principais:');
+        console.log('Header:', document.getElementById('hero-section'));
+        console.log('Footer:', document.getElementById('contact-section'));
+        console.log('Timeline:', document.getElementById('timeline-section'));
         
         // Mostrar notificação de boas-vindas
         setTimeout(() => {
