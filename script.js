@@ -150,29 +150,31 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Função para adicionar menu de navegação rápida
     function setupQuickNav() {
+        // Verificar se é mobile - se for, não criar o menu
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            return; // Não criar o menu em dispositivos móveis
+        }
+        
         const quickNav = document.createElement('nav');
         quickNav.className = 'quick-nav';
         quickNav.id = 'quickNav';
         
-        // Estilos responsivos
-        const isMobile = window.innerWidth <= 768;
-        
         quickNav.style.cssText = `
             position: fixed;
-            ${isMobile ? 'bottom: 80px; right: 15px; top: auto; transform: none;' : 'top: 50%; right: 20px; transform: translateY(-50%);'}
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
             background: rgba(255, 255, 255, 0.95);
-            border-radius: ${isMobile ? '15px' : '25px'};
-            padding: ${isMobile ? '10px' : '15px'};
+            border-radius: 25px;
+            padding: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             backdrop-filter: blur(10px);
-            max-height: ${isMobile ? '60vh' : 'auto'};
-            overflow-y: auto;
-            ${isMobile ? 'display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; width: 200px;' : ''}
         `;
         
         const sections = [
-            { id: 'header', label: '🏠 Início' },
+            { id: 'hero-section', label: '🏠 Início' },
             { id: 'candidates-section', label: '👥 Candidatos' },
             { id: 'principles-section', label: '🎯 Princípios' },
             { id: 'graduation-section', label: '🎓 Graduação' },
@@ -181,8 +183,8 @@ document.addEventListener('DOMContentLoaded', function() {
             { id: 'extension-section', label: '🤝 Extensão' },
             { id: 'management-section', label: '⚙️ Gestão' },
             { id: 'public-proposals-section', label: '👥 Propostas' },
-            { id: 'timeline', label: '📅 Cronograma' },
-            { id: 'footer', label: '📞 Contato' }
+            { id: 'timeline-section', label: '📅 Cronograma' },
+            { id: 'contact-section', label: '📞 Contato' }
         ];
         
         sections.forEach(section => {
@@ -191,23 +193,20 @@ document.addEventListener('DOMContentLoaded', function() {
             link.textContent = section.label;
             link.style.cssText = `
                 display: block;
-                padding: ${isMobile ? '6px 8px' : '8px 12px'};
+                padding: 8px 12px;
                 color: #2c3e50;
                 text-decoration: none;
-                border-radius: ${isMobile ? '8px' : '15px'};
-                margin: ${isMobile ? '2px 0' : '5px 0'};
-                font-size: ${isMobile ? '0.75em' : '0.9em'};
+                border-radius: 15px;
+                margin: 5px 0;
+                font-size: 0.9em;
                 transition: all 0.3s ease;
-                text-align: center;
                 white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
             `;
             
             link.addEventListener('mouseenter', () => {
                 link.style.background = '#27ae60';
                 link.style.color = 'white';
-                link.style.transform = isMobile ? 'scale(1.05)' : 'scale(1.1)';
+                link.style.transform = 'scale(1.05)';
             });
             
             link.addEventListener('mouseleave', () => {
@@ -218,64 +217,39 @@ document.addEventListener('DOMContentLoaded', function() {
             
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const targetElement = document.getElementById(section.id) || document.querySelector(`[data-section="${section.id}"]`);
+                const targetElement = document.getElementById(section.id);
                 if (targetElement) {
                     targetElement.scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
                     });
                 } else {
-                    smoothScroll(`#${section.id}`);
+                    // Fallback para elementos que podem ter IDs diferentes
+                    const fallbackElement = document.querySelector(`[data-section="${section.id}"]`) || 
+                                          document.querySelector(`.${section.id}`) ||
+                                          document.querySelector(`#${section.id.replace('-section', '')}`);
+                    if (fallbackElement) {
+                        fallbackElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
                 }
             });
             
             quickNav.appendChild(link);
         });
         
-        // Adicionar botão de minimizar/expandir para mobile
-        if (isMobile) {
-            const toggleButton = document.createElement('button');
-            toggleButton.innerHTML = '📍';
-            toggleButton.style.cssText = `
-                position: absolute;
-                top: -10px;
-                right: -10px;
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                background: #27ae60;
-                color: white;
-                border: none;
-                font-size: 12px;
-                cursor: pointer;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            `;
-            
-            let isMinimized = false;
-            toggleButton.addEventListener('click', () => {
-                if (isMinimized) {
-                    quickNav.style.transform = 'scale(1)';
-                    quickNav.style.opacity = '1';
-                    toggleButton.innerHTML = '📍';
-                    isMinimized = false;
-                } else {
-                    quickNav.style.transform = 'scale(0.3)';
-                    quickNav.style.opacity = '0.7';
-                    toggleButton.innerHTML = '📌';
-                    isMinimized = true;
-                }
-            });
-            
-            quickNav.appendChild(toggleButton);
-        }
-        
         document.body.appendChild(quickNav);
         
-        // Listener para redimensionamento da tela
+        // Listener para redimensionamento da tela - remover menu se ficar mobile
         window.addEventListener('resize', () => {
+            const isMobileNow = window.innerWidth <= 768;
             const currentNav = document.getElementById('quickNav');
-            if (currentNav) {
+            
+            if (isMobileNow && currentNav) {
                 currentNav.remove();
+            } else if (!isMobileNow && !currentNav) {
                 setupQuickNav();
             }
         });
