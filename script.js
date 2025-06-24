@@ -163,12 +163,228 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 30000); // Atualizar a cada 30 segundos
     }
     
+    // Função para criar menu mobile moderno
+    function setupMobileNav() {
+        // Botão flutuante para abrir o menu
+        const menuButton = document.createElement('button');
+        menuButton.className = 'mobile-nav-button';
+        menuButton.innerHTML = '📋';
+        menuButton.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2em;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 20px rgba(39, 174, 96, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        `;
+        
+        // Overlay do menu
+        const menuOverlay = document.createElement('div');
+        menuOverlay.className = 'mobile-nav-overlay';
+        menuOverlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1002;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        `;
+        
+        // Menu drawer
+        const menuDrawer = document.createElement('div');
+        menuDrawer.className = 'mobile-nav-drawer';
+        menuDrawer.style.cssText = `
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100%;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            z-index: 1003;
+            transition: right 0.3s ease;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+        `;
+        
+        // Cabeçalho do menu
+        const menuHeader = document.createElement('div');
+        menuHeader.style.cssText = `
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        `;
+        menuHeader.innerHTML = `
+            <h3 style="margin: 0; font-size: 1.2em;">📋 Índice</h3>
+            <button class="close-menu" style="
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.5em;
+                cursor: pointer;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background 0.2s ease;
+            ">×</button>
+        `;
+        
+        // Lista de navegação
+        const navList = document.createElement('div');
+        navList.style.cssText = `
+            padding: 20px 0;
+        `;
+        
+        const sections = [
+            { id: 'hero-section', label: '🏠 Início' },
+            { id: 'candidates-section', label: '👥 Candidatos' },
+            { id: 'principles-section', label: '🎯 Princípios' },
+            { id: 'graduation-section', label: '🎓 Graduação' },
+            { id: 'postgrad-section', label: '📚 Pós-Grad' },
+            { id: 'research-section', label: '🔬 Pesquisa' },
+            { id: 'extension-section', label: '🤝 Extensão' },
+            { id: 'management-section', label: '⚙️ Gestão' },
+            { id: 'public-proposals-section', label: '📋 Categorias' },
+            { id: 'downloads-section', label: '📥 Downloads' },
+            { id: 'contact-section', label: '📞 Contato' }
+        ];
+        
+        sections.forEach((section, index) => {
+            const navItem = document.createElement('a');
+            navItem.href = `#${section.id}`;
+            navItem.textContent = section.label;
+            navItem.style.cssText = `
+                display: block;
+                padding: 15px 25px;
+                color: #2c3e50;
+                text-decoration: none;
+                border-bottom: 1px solid #ecf0f1;
+                transition: all 0.3s ease;
+                font-size: 1em;
+                position: relative;
+            `;
+            
+            // Animação de entrada escalonada
+            navItem.style.animationDelay = `${index * 50}ms`;
+            
+            navItem.addEventListener('click', (e) => {
+                e.preventDefault();
+                closeMobileMenu();
+                
+                // Scroll para a seção
+                setTimeout(() => {
+                    const targetElement = document.getElementById(section.id);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } else {
+                        // Fallbacks específicos
+                        if (section.id === 'hero-section') {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else if (section.id === 'contact-section') {
+                            const footer = document.querySelector('footer');
+                            if (footer) footer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        } else if (section.id === 'downloads-section') {
+                            const downloadsSection = document.querySelector('.downloads-section');
+                            if (downloadsSection) downloadsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                }, 300);
+            });
+            
+            // Efeitos hover
+            navItem.addEventListener('touchstart', () => {
+                navItem.style.background = '#27ae60';
+                navItem.style.color = 'white';
+                navItem.style.paddingLeft = '35px';
+            });
+            
+            navItem.addEventListener('touchend', () => {
+                setTimeout(() => {
+                    navItem.style.background = 'transparent';
+                    navItem.style.color = '#2c3e50';
+                    navItem.style.paddingLeft = '25px';
+                }, 200);
+            });
+            
+            navList.appendChild(navItem);
+        });
+        
+        // Montar o menu
+        menuDrawer.appendChild(menuHeader);
+        menuDrawer.appendChild(navList);
+        
+        // Funções de controle
+        function openMobileMenu() {
+            menuOverlay.style.opacity = '1';
+            menuOverlay.style.visibility = 'visible';
+            menuDrawer.style.right = '0';
+            menuButton.style.transform = 'rotate(180deg)';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeMobileMenu() {
+            menuOverlay.style.opacity = '0';
+            menuOverlay.style.visibility = 'hidden';
+            menuDrawer.style.right = '-300px';
+            menuButton.style.transform = 'rotate(0deg)';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Event listeners
+        menuButton.addEventListener('click', openMobileMenu);
+        menuOverlay.addEventListener('click', closeMobileMenu);
+        menuHeader.querySelector('.close-menu').addEventListener('click', closeMobileMenu);
+        
+        // Adicionar elementos ao DOM
+        document.body.appendChild(menuButton);
+        document.body.appendChild(menuOverlay);
+        document.body.appendChild(menuDrawer);
+        
+        // Listener para redimensionamento
+        window.addEventListener('resize', () => {
+            const isMobileNow = window.innerWidth <= 768;
+            if (!isMobileNow) {
+                // Remover menu mobile e criar desktop
+                menuButton.remove();
+                menuOverlay.remove();
+                menuDrawer.remove();
+                document.body.style.overflow = 'auto';
+                setupQuickNav();
+            }
+        });
+    }
+    
     // Função para adicionar menu de navegação rápida
     function setupQuickNav() {
-        // Verificar se é mobile - se for, não criar o menu
         const isMobile = window.innerWidth <= 768;
+        
         if (isMobile) {
-            return; // Não criar o menu em dispositivos móveis
+            // Criar menu mobile moderno
+            setupMobileNav();
+            return;
         }
         
         const quickNav = document.createElement('nav');
@@ -197,7 +413,8 @@ document.addEventListener('DOMContentLoaded', function() {
             { id: 'research-section', label: '🔬 Pesquisa' },
             { id: 'extension-section', label: '🤝 Extensão' },
             { id: 'management-section', label: '⚙️ Gestão' },
-            { id: 'public-proposals-section', label: '👥 Propostas' },
+            { id: 'public-proposals-section', label: '📋 Categorias' },
+            { id: 'downloads-section', label: '📥 Downloads' },
             { id: 'contact-section', label: '📞 Contato' }
         ];
         
@@ -255,6 +472,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (footer) {
                             footer.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }
+                    } else if (section.id === 'downloads-section') {
+                        const downloadsSection = document.querySelector('.downloads-section');
+                        console.log('Seção Downloads encontrada:', downloadsSection);
+                        if (downloadsSection) {
+                            downloadsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
                     }
                 }
             });
@@ -271,7 +494,17 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (isMobileNow && currentNav) {
                 currentNav.remove();
+                setupMobileNav();
             } else if (!isMobileNow && !currentNav) {
+                // Remover elementos mobile se existirem
+                const mobileButton = document.querySelector('.mobile-nav-button');
+                const mobileOverlay = document.querySelector('.mobile-nav-overlay');
+                const mobileDrawer = document.querySelector('.mobile-nav-drawer');
+                
+                if (mobileButton) mobileButton.remove();
+                if (mobileOverlay) mobileOverlay.remove();
+                if (mobileDrawer) mobileDrawer.remove();
+                
                 setupQuickNav();
             }
         });
