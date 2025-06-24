@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         
         // Simular contador de visitantes
-        let visitors = Math.floor(Math.random() * 1000) + 500;
+        let visitors = Math.floor(Math.random() * 200) + 50;
         counterElement.innerHTML = `👥 ${visitors} visualizações`;
         
         document.body.appendChild(counterElement);
