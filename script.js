@@ -419,14 +419,14 @@ document.addEventListener('DOMContentLoaded', function() {
         shareButton.addEventListener('click', () => {
             if (navigator.share) {
                 navigator.share({
-                    title: 'Eleição CMULTI UFAC - Diretor(a) e Vice-Diretor(a) 2025-2029',
-                    text: 'Participe da eleição para Diretor(a) e Vice-Diretor(a) do CMULTI UFAC',
+                    title: 'Chapa Integrar - CMULTI UFAC 2025-2029',
+                    text: 'Conheça as propostas da Chapa Integrar para o CMULTI UFAC. Gestão participativa e transparente!',
                     url: window.location.href
                 });
             } else {
                 // Fallback para navegadores que não suportam Web Share API
                 const url = encodeURIComponent(window.location.href);
-                const text = encodeURIComponent('Participe da eleição para Diretor(a) e Vice-Diretor(a) do CMULTI UFAC');
+                const text = encodeURIComponent('Conheça as propostas da Chapa Integrar para o CMULTI UFAC. Gestão participativa e transparente!');
                 window.open(`https://wa.me/?text=${text}%20${url}`, '_blank');
             }
         });
@@ -471,7 +471,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Mostrar notificação de boas-vindas
         setTimeout(() => {
-            showNotification('Bem-vindo à página de eleição do CMULTI UFAC!', 'success');
+            showNotification('Bem-vindo à página da Chapa Integrar! Conheça nossas propostas para o CMULTI 2025-2029.', 'success');
         }, 1000);
     }
     
