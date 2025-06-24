@@ -122,17 +122,23 @@ document.addEventListener('DOMContentLoaded', function() {
     function setupVisitorCounter() {
         const counterElement = document.createElement('div');
         counterElement.className = 'visitor-counter';
+        
+        // Verificar se é mobile para ajustar posicionamento
+        const isMobile = window.innerWidth <= 768;
+        
         counterElement.style.cssText = `
             position: fixed;
-            bottom: 20px;
+            ${isMobile ? 'bottom: 80px;' : 'bottom: 20px;'}
             left: 20px;
             background: rgba(52, 152, 219, 0.9);
             color: white;
-            padding: 10px 15px;
+            padding: ${isMobile ? '8px 12px;' : '10px 15px;'}
             border-radius: 25px;
-            font-size: 0.9em;
+            font-size: ${isMobile ? '0.8em;' : '0.9em;'}
             z-index: 1000;
             backdrop-filter: blur(10px);
+            max-width: ${isMobile ? '150px;' : 'none;'}
+            text-align: center;
         `;
         
         // Simular contador de visitantes
@@ -140,6 +146,15 @@ document.addEventListener('DOMContentLoaded', function() {
         counterElement.innerHTML = `👥 ${visitors} visualizações`;
         
         document.body.appendChild(counterElement);
+        
+        // Listener para redimensionamento da tela
+        window.addEventListener('resize', () => {
+            const isMobileNow = window.innerWidth <= 768;
+            counterElement.style.bottom = isMobileNow ? '80px' : '20px';
+            counterElement.style.padding = isMobileNow ? '8px 12px' : '10px 15px';
+            counterElement.style.fontSize = isMobileNow ? '0.8em' : '0.9em';
+            counterElement.style.maxWidth = isMobileNow ? '150px' : 'none';
+        });
         
         // Atualizar contador periodicamente
         setInterval(() => {
@@ -400,20 +415,25 @@ document.addEventListener('DOMContentLoaded', function() {
     function setupSocialSharing() {
         const shareButton = document.createElement('button');
         shareButton.innerHTML = '📤 Compartilhar';
+        
+        // Verificar se é mobile para ajustar posicionamento
+        const isMobile = window.innerWidth <= 768;
+        
         shareButton.style.cssText = `
             position: fixed;
-            bottom: 20px;
+            ${isMobile ? 'bottom: 80px;' : 'bottom: 20px;'}
             right: 20px;
             background: linear-gradient(135deg, #27ae60, #229954);
             color: white;
             border: none;
             border-radius: 25px;
-            padding: 12px 20px;
-            font-size: 1em;
+            padding: ${isMobile ? '10px 16px;' : '12px 20px;'}
+            font-size: ${isMobile ? '0.9em;' : '1em;'}
             cursor: pointer;
             z-index: 1000;
             box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
             transition: all 0.3s ease;
+            max-width: ${isMobile ? '120px;' : 'none;'}
         `;
         
         shareButton.addEventListener('click', () => {
@@ -432,6 +452,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         document.body.appendChild(shareButton);
+        
+        // Listener para redimensionamento da tela
+        window.addEventListener('resize', () => {
+            const isMobileNow = window.innerWidth <= 768;
+            shareButton.style.bottom = isMobileNow ? '80px' : '20px';
+            shareButton.style.padding = isMobileNow ? '10px 16px' : '12px 20px';
+            shareButton.style.fontSize = isMobileNow ? '0.9em' : '1em';
+            shareButton.style.maxWidth = isMobileNow ? '120px' : 'none';
+        });
     }
     
     // Tab functionality for public proposals
