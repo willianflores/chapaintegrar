@@ -60,60 +60,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Função para scroll suave melhorada
+    // Função para scroll suave
     function smoothScroll(target) {
-        // Remover # se existir
-        const targetId = target.replace('#', '');
-        let element = document.getElementById(targetId);
-        
-        // Fallbacks específicos se o elemento não for encontrado
-        if (!element) {
-            console.log(`Elemento ${targetId} não encontrado, tentando fallbacks...`);
-            
-            if (targetId === 'hero-section') {
-                element = document.querySelector('header.header') || document.querySelector('.header');
-                console.log('Fallback header:', element);
-            } else if (targetId === 'contact-section') {
-                element = document.querySelector('footer.footer') || document.querySelector('.footer');
-                console.log('Fallback footer:', element);
-            } else if (targetId === 'timeline-section') {
-                element = document.querySelector('.timeline-section') || document.querySelector('.timeline');
-                console.log('Fallback timeline:', element);
-            } else {
-                element = document.querySelector(target);
-            }
-        }
-        
+        const element = document.querySelector(target);
         if (element) {
-            console.log(`Navegando para elemento:`, element);
-            
-            // Método mais simples e confiável
             element.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
             });
-            
-            // Pequeno ajuste para compensar header se necessário
-            setTimeout(() => {
-                const currentScroll = window.pageYOffset;
-                const headerHeight = document.querySelector('.header')?.offsetHeight || 0;
-                
-                if (currentScroll > 0) {
-                    window.scrollTo({
-                        top: currentScroll - Math.min(headerHeight, 80),
-                        behavior: 'smooth'
-                    });
-                }
-            }, 100);
-        } else {
-            console.log(`Elemento não encontrado: ${target}`);
-            // Como último recurso, tentar scroll para o topo se for hero-section
-            if (targetId === 'hero-section') {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            }
         }
     }
     
@@ -263,9 +217,38 @@ document.addEventListener('DOMContentLoaded', function() {
             
             link.addEventListener('click', (e) => {
                 e.preventDefault();
+                console.log(`Clicou em: ${section.label} (${section.id})`);
                 
-                // Usar a função smoothScroll melhorada
-                smoothScroll(`#${section.id}`);
+                // Buscar o elemento diretamente
+                const targetElement = document.getElementById(section.id);
+                console.log(`Elemento encontrado:`, targetElement);
+                
+                if (targetElement) {
+                    console.log(`Fazendo scroll para:`, targetElement);
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                } else {
+                    console.log(`Elemento ${section.id} não encontrado, tentando fallback...`);
+                    // Fallback simples para casos específicos
+                    if (section.id === 'hero-section') {
+                        console.log('Fazendo scroll para o topo');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else if (section.id === 'contact-section') {
+                        const footer = document.querySelector('footer');
+                        console.log('Footer encontrado:', footer);
+                        if (footer) {
+                            footer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    } else if (section.id === 'timeline-section') {
+                        const timeline = document.querySelector('.timeline-section');
+                        console.log('Timeline encontrado:', timeline);
+                        if (timeline) {
+                            timeline.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }
+                }
             });
             
             quickNav.appendChild(link);
@@ -491,11 +474,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setupSocialSharing();
         initTabs(); // Inicializar tabs
         
-        // Verificar se os elementos principais existem
-        console.log('Verificando elementos principais:');
-        console.log('Header:', document.getElementById('hero-section'));
-        console.log('Footer:', document.getElementById('contact-section'));
-        console.log('Timeline:', document.getElementById('timeline-section'));
+        // Elementos principais carregados
         
         // Mostrar notificação de boas-vindas
         setTimeout(() => {
