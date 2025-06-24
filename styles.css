@@ -347,6 +347,113 @@ body {
   margin: 0;
 }
 
+/* Public Proposals Tabs */
+.public-tabs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+  background: var(--medium-gray);
+  padding: 0.5rem;
+  border-radius: 12px;
+}
+
+.tab-button {
+  background: transparent;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.tab-button:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.tab-button.active {
+  background: var(--primary-green);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+}
+
+.tab-content {
+  display: none;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.public-proposals {
+  margin-top: 2rem;
+}
+
+.proposal-category {
+  background: var(--light-gray);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--secondary-green);
+  transition: var(--transition);
+}
+
+.proposal-category:hover {
+  background: var(--medium-gray);
+  transform: translateX(5px);
+}
+
+.proposal-category h5 {
+  color: var(--primary-green);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.proposal-category h5 i {
+  font-size: 1.1rem;
+}
+
+.proposal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.proposal-list li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(39, 174, 96, 0.1);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-dark);
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.proposal-list li:last-child {
+  border-bottom: none;
+}
+
+.proposal-list li::before {
+  content: "▶";
+  color: var(--primary-green);
+  font-size: 0.8rem;
+  position: absolute;
+  left: 0;
+  top: 0.8rem;
+}
+
 /* Timeline */
 .timeline-section {
   background: rgba(255, 255, 255, 0.1);
@@ -635,6 +742,20 @@ body {
 
   .principle-icon {
     font-size: 1.3rem;
+  }
+
+  .public-tabs {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .tab-button {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .proposal-category {
+    margin-bottom: 1.5rem;
   }
 }
 
