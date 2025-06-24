@@ -41,9 +41,6 @@ body {
   backdrop-filter: blur(10px);
   padding: 2rem 0;
   box-shadow: var(--shadow);
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
 .header-content {
