@@ -183,7 +183,6 @@ document.addEventListener('DOMContentLoaded', function() {
             { id: 'extension-section', label: '🤝 Extensão' },
             { id: 'management-section', label: '⚙️ Gestão' },
             { id: 'public-proposals-section', label: '👥 Propostas' },
-            { id: 'timeline-section', label: '📅 Cronograma' },
             { id: 'contact-section', label: '📞 Contato' }
         ];
         
@@ -240,12 +239,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log('Footer encontrado:', footer);
                         if (footer) {
                             footer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                    } else if (section.id === 'timeline-section') {
-                        const timeline = document.querySelector('.timeline-section');
-                        console.log('Timeline encontrado:', timeline);
-                        if (timeline) {
-                            timeline.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }
                     }
                 }
